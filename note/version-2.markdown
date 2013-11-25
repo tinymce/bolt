@@ -3,7 +3,7 @@ New concepts
 ------------
 
  - project: A configured bolt project, this would generally be done with a project.json, but can be
-            acheived in an ad-hoc manner using command line argments. project.json shall include
+            achieved in an ad-hoc manner using command line argments. project.json shall include
             the ability to provide defaults for all command line arguments, including things such
             as build groups, test suites, config directories, cache directories.
 
