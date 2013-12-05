@@ -9,7 +9,7 @@ compiler.mode.dev = def(
       var relative = path.relative(path.dirname(bootstrap), config);
 
       var hookup =
-        '(function () {\n' +
+        '(function (global) {\n' +
         '  var obj = ephox.bolt.kernel.fp.object;\n' +
         '  var api = ephox.bolt.module.api;\n' +
         '  var builtins = ephox.bolt.module.config.builtins.browser;\n' +
@@ -18,8 +18,8 @@ compiler.mode.dev = def(
         '  var transport = ephox.bolt.loader.transporter.xhr.request;\n' +
         '  var script = ephox.bolt.loader.api.scripttag.load;\n' +
         '  install.install(reader, builtins, transport, script);\n' +
-        '  obj.merge(window, api);\n' +
-        '})();';
+        '  obj.merge(global, api);\n' +
+        '})(Function("return this;")());';
       generator.generate(bootstrap, hookup);
     };
 
