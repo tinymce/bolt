@@ -36,8 +36,13 @@ test.report.logger = def(
           log();
         };
 
+        var htmlcompare = function() {
+          fail("HTML comparison only supported in Tunic");
+        };
+
         return {
           pass: pass,
+          htmlcompare: htmlcompare,
           fail: fail
         };
       };
