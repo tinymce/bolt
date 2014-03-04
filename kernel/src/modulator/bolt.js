@@ -4,13 +4,15 @@ kernel.modulator.bolt = def(
   ],
 
   function (fn) {
-    var create = function (loader, pather, namespace, path, idTransformer) {
+    var create = function (loader, pather, namespace, path, idTransformer, options) {
       var can = function (id) {
         return id === namespace || id.indexOf(namespace + '.') === 0;
       };
 
       var get = function (id) {
-        var url = pather(path) + "/" + idTransformer(id) + '.js';
+        var before = options !== undefined && options.absolute === true ? path : pather(path);
+        var after = options !== undefined && options.fresh === true ? '?cachebuster=' + new Date().getTime() : '';
+        var url = before + "/" + idTransformer(id) + '.js' + after;
         var load = fn.curry(loader.load, url);
 
         return {
