@@ -43,11 +43,20 @@ test.assert.assert = def(
         throw new Error('Test failed.');
     };
 
+    var html = function (expected, actual, message) {
+      return {
+        expected: expected,
+        actual: actual,
+        message: message
+      };
+    };
+
     return {
       eq: eq,
       throws: throws,
       succeeds: succeeds,
-      fail: fail
+      fail: fail,
+      html: html
     };
   }
 );

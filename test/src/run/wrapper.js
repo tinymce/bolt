@@ -7,6 +7,17 @@ test.run.wrapper = def(
   function (global, assert) {
     global.assert = assert;
 
+    var resulter = function (testcase) {
+      return function (returned) {
+        if (returned === undefined)
+          testcase.pass();
+        else if (typeof returned === 'object' && Array.prototype.isPrototypeOf(returned))
+          testcase.htmlcompare(returned);
+        else
+          throw 'Tests must either return undefined or an array of HTML comparison objects';
+      };
+    };
+
     var sync = function (reporter, testfile, name, f, next) {
       global.define = ephox.bolt.module.api.define;
       global.require = ephox.bolt.module.api.require;
@@ -15,8 +26,7 @@ test.run.wrapper = def(
       return function (/* arguments */) {
         var testcase = reporter.test(testfile, name);
         try {
-          f.apply(null, arguments);
-          testcase.pass();
+          resulter(testcase)(f.apply(null, arguments));
         } catch (e) {
           testcase.fail(e);
         } finally {
@@ -46,7 +56,7 @@ test.run.wrapper = def(
           };
         };
 
-        var onsuccess = oncomplete(testcase.pass);
+        var onsuccess = oncomplete(resulter(testcase));
         var onfailure = oncomplete(testcase.fail);
 
         var args = Array.prototype.slice.call(arguments, 0);
