@@ -9,12 +9,15 @@ compiler.mode.inline = def(
   ],
 
   function (filer, io, error, metalator, inline, ar) {
-    var register = function (files) {
-      var ids = ar.flatmap(files, metalator.boltmodules);
-      return ar.map(ids, function (id) {
-        return 'register("' + id + '");';
-      }).join('\n');
-    };
+    // TODO: in tools somewhere
+    function escapeRegExp (string) {
+        return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    }
+
+    function replaceAll (string, target, value) {
+      var search = '["\']' + target + '["\']';
+      return string.replace(new RegExp(search, 'g'), '\'' + value + '\'');
+    }
 
     var readall = function (files) {
       var read = io.readall(files);
@@ -22,12 +25,34 @@ compiler.mode.inline = def(
     };
 
     var run = function (config, files, target, registermodules, main) {
+      // moved register inside this function so we have access to the list of IDs for obfuscation
+      var ids = ar.flatmap(files, metalator.boltmodules);
+      var register = function (files) {
+        return ar.map(ids, function (id) {
+          return 'register(\'' + id + '\');';
+        }).join('\n');
+      };
+
       var result = readall(files);
       if (registermodules || main === undefined)
+        // TODO: register doesn't work with obfuscation. Make obfs an option, and don't allow both simultaneously.
+        // Or just ditch register, we've never used it.
         result += '\n' + register(files);
       if (main !== undefined)
-        result += '\ndem("' + main + '")();';
-      inline.generate(target, result);
+        result += '\ndem(\'' + main + '\')();';
+
+
+      // perform obfuscation
+      var defcount = 0;
+      var nextid = function() {
+        return "" + defcount++;
+      };
+      var returnResult = result;
+      ar.each(ids, function (id) {
+        returnResult = replaceAll(returnResult, id, nextid());
+      });
+
+      inline.generate(target, returnResult);
     };
 
     return {
