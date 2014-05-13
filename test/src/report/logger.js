@@ -26,7 +26,7 @@ test.report.logger = def(
 
         var pass = function () {
           ++passed;
-          vlog('+ [passed] in ' + timer.elapsed(starttime))
+          vlog('+ [passed] in ' + timer.elapsed(starttime));
         };
 
         var fail = function (error) {
@@ -60,6 +60,6 @@ test.report.logger = def(
 
     return {
       create: create
-    }
+    };
   }
 );
