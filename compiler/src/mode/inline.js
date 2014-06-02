@@ -10,7 +10,7 @@ compiler.mode.inline = def(
 
   function (filer, io, error, metalator, inline, ar) {
 
-    var verbose = false;
+    var verbose = true;
 
     // TODO: in tools somewhere
     function escapeRegExp (string) {
@@ -58,7 +58,7 @@ compiler.mode.inline = def(
       var nextId = mkNextId();
       ar.each(ids, function (id) {
         var mappedTo = nextId();
-        if (verbose) console.log("Mapping module '%s' => '%s'", id, mappedTo);
+        if (verbose) console.log("Mapping module %s => %s", JSON.stringify(id), JSON.stringify(mappedTo));
         result = replaceAll(result, id, mappedTo);
       });
 
