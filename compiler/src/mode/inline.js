@@ -44,11 +44,7 @@ compiler.mode.inline = def(
         var nextId = function() {
           var currentIndex = moduleIndex;
           ++moduleIndex;
-          var single = true;
-          var to = (function () {
-            if (single) return String.fromCharCode(currentIndex);
-            else return currentIndex.toString();
-          })();
+          var to = String.fromCharCode(currentIndex);
           var legalString = JSON.stringify(to);
           if (legalString.length > 3) {
             if (verbose) console.log("Skipping crunched module name " + legalString + " as was length (" + legalString.length + ") was greater than 3");
