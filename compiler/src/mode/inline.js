@@ -9,6 +9,9 @@ compiler.mode.inline = def(
   ],
 
   function (filer, io, error, metalator, inline, ar) {
+
+    var verbose = false;
+
     // TODO: in tools somewhere
     function escapeRegExp (string) {
         return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
@@ -41,18 +44,25 @@ compiler.mode.inline = def(
       if (main !== undefined)
         result += '\ndem(\'' + main + '\')();';
 
-
-      // perform obfuscation
-      var defcount = 0;
-      var nextid = function() {
-        return "" + defcount++;
+      var mkNextId = function() {
+        var moduleIndex = 0;
+        var nextId = function() {
+          var currentIndex = moduleIndex;
+          ++moduleIndex;
+          return currentIndex.toString();
+        };
+        return nextId;
       };
-      var returnResult = result;
+
+      // Replace module names with obfuscated/minified names.
+      var nextId = mkNextId();
       ar.each(ids, function (id) {
-        returnResult = replaceAll(returnResult, id, nextid());
+        var mappedTo = nextId();
+        if (verbose) console.log("Mapping module '%s' => '%s'", id, mappedTo);
+        result = replaceAll(result, id, mappedTo);
       });
 
-      inline.generate(target, returnResult);
+      inline.generate(target, result);
     };
 
     return {
