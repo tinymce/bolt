@@ -10,17 +10,12 @@ compiler.mode.inline = def(
 
   function (filer, io, error, metalator, inline, ar) {
 
-    var verbose = true;
+    var verbose = false;
 
-    // TODO: in tools somewhere
-    function escapeRegExp (string) {
-        return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-    }
-
-    function replaceAll (string, target, value) {
-      var search = '["\']' + target + '["\']';
-      return string.replace(new RegExp(search, 'g'), '\'' + value + '\'');
-    }
+    var replaceAll = function (string, target, value) {
+      var search = '["\']' + target + '["\']'; // FIX: Be more precise here. Either '<module-name>' or "<module-name>".
+      return string.replace(new RegExp(search, 'g'), value);
+    };
 
     var readall = function (files) {
       var read = io.readall(files);
@@ -49,16 +44,25 @@ compiler.mode.inline = def(
         var nextId = function() {
           var currentIndex = moduleIndex;
           ++moduleIndex;
-          return currentIndex.toString();
+          var single = true;
+          var to = (function () {
+            if (single) return String.fromCharCode(currentIndex);
+            else return currentIndex.toString();
+          })();
+          var legalString = JSON.stringify(to);
+          if (legalString.length > 3) {
+            if (verbose) console.log("Skipping crunched module name " + legalString + " as was length (" + legalString.length + ") was greater than 3");
+            return nextId(); // Recursing here. Forever?
+          } else return legalString;
         };
         return nextId;
       };
 
-      // Replace module names with obfuscated/minified names.
+      // Replace module names with single-character names.
       var nextId = mkNextId();
       ar.each(ids, function (id) {
         var mappedTo = nextId();
-        if (verbose) console.log("Mapping module %s => %s", JSON.stringify(id), JSON.stringify(mappedTo));
+        if (verbose) console.log("Mapping module %s => %s", JSON.stringify(id), mappedTo);
         result = replaceAll(result, id, mappedTo);
       });
 
