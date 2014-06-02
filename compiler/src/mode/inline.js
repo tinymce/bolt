@@ -46,10 +46,11 @@ compiler.mode.inline = def(
           ++moduleIndex;
           var to = String.fromCharCode(currentIndex);
           var legalString = JSON.stringify(to);
-          if (legalString.length > 3) {
+          var tooLong = function () {
             if (verbose) console.log("Skipping crunched module name " + legalString + " as was length (" + legalString.length + ") was greater than 3");
             return nextId(); // Recursing here. Forever?
-          } else return legalString;
+          };
+          return (legalString.length > 3) ? tooLong() : legalString;
         };
         return nextId;
       };
