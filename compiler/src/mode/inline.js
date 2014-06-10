@@ -31,9 +31,8 @@ compiler.mode.inline = def(
 
       var result = readall(files);
       if (registermodules || main === undefined)
-        // TODO: register doesn't work with obfuscation. Make obfs an option, and don't allow both simultaneously.
-        // Or just ditch register, we've never used it.
         result += '\n' + register(files);
+
       if (main !== undefined)
         result += '\ndem(\'' + main + '\')();';
 
