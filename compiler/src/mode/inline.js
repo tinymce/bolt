@@ -10,7 +10,7 @@ compiler.mode.inline = def(
 
   function (filer, io, error, metalator, inline, ar) {
 
-    var verbose = false;
+    var verbose = true;
 
     var replaceAll = function (string, target, value) {
       var search = '["\']' + target + '["\']'; // FIX: Be more precise here. Either '<module-name>' or "<module-name>".
@@ -40,22 +40,17 @@ compiler.mode.inline = def(
         result += '\ndem(\'' + main + '\')();';
 
       var mkNextId = function() {
+        var base = 36;
         var moduleIndex = 0;
         var nextId = function() {
           var currentIndex = moduleIndex;
           ++moduleIndex;
-          var to = String.fromCharCode(currentIndex);
-          var legalString = JSON.stringify(to);
-          var tooLong = function () {
-            if (verbose) console.log("Skipping crunched module name " + legalString + " as was length (" + legalString.length + ") was greater than 3");
-            return nextId(); // Recursing here. Forever?
-          };
-          return (legalString.length > 3) ? tooLong() : legalString;
+          return JSON.stringify(currentIndex.toString(base));
         };
         return nextId;
       };
 
-      // Replace module names with single-character names.
+      // Replace module names shorter aliases.
       var nextId = mkNextId();
       ar.each(ids, function (id) {
         var mappedTo = nextId();
