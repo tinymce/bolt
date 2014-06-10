@@ -11,6 +11,7 @@ compiler.generator.inline = def(
       var inline = fs[0];
       var pre = fs[1];
       var post = fs[2];
+
       var contents = [ pre, inline, compiled, post ].join('\n');
       io.write(target, contents);
     };
