@@ -51,7 +51,7 @@ compiler.mode.inline = def(
         var nextId = mkNextId();
         ar.each(ids, function (id) {
           var mappedTo = nextId();
-          if (verbosity > 0) console.log("Mapping module %s => %s", JSON.stringify(id), mappedTo);
+          if (verbosity > 0) console.log("Mapping module %s ⇒ %s", JSON.stringify(id), mappedTo);
           result = replaceAll(result, id, mappedTo);
         });
       };
