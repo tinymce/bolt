@@ -185,6 +185,10 @@ module.exports = function (help_mode) {
     }
   }
 
+  if (minimise_module_names && register_modules) {
+    fail_usage(1, 'Option "--minimise-module-names" is incompatible with "--register"');
+  }
+
   // nodejs doesn't have an mkdir -p equivalent
   var mkdirp = function (dir) {
     dir = path.resolve(dir);
