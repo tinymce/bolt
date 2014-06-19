@@ -16,6 +16,7 @@ var usage = function () {
          '                                   default: src/main/js\n' +
          '  -i|--inline                    enable generation of inline scripts (only\n' +
          '                                 produces output in conjunction with -e or -g).\n' +
+         '  -a|--minimise-module-names     use short aliases to minimise modules names.\n' +
          '  -n|--invoke-main MAIN_MODULE   specify a main module for inline scripts.\n' +
          '  -r|--register                  register modules in a global namespace for\n' +
          '                                 inline scripts. Defaults to true unless -n is\n' +
@@ -28,6 +29,7 @@ var usage = function () {
          '                                 output will be generated with NAME for each\n' +
          '                                 entry group. Multiple -g flags may be\n' +
          '                                 specified.\n' +
+         '  -v|--verbose                   increase verbosity of logging output.\n' +
          '\n' +
          'example:\n' +
          '  Produce a bolt build for a top level application. A compiled file will be\n' +
@@ -82,10 +84,12 @@ module.exports = function (help_mode) {
   var src_dir = 'src/main/js';
   var generate_inline = false;
   var generate_modules = false;
+  var minimise_module_names = false;
   var register_modules = false;
   var main = undefined;
   var entry_points = [];
   var entry_groups = {};
+  var verbosity = 0;
 
   var path = require('path');
   var fs = require('fs');
@@ -131,6 +135,10 @@ module.exports = function (help_mode) {
       case '--inline':
         generate_inline = true;
         break;
+      case '-a':
+      case '--minimise-module-names':
+        minimise_module_names = true;
+        break;
       case '-m':
       case '--modules':
         generate_modules = true;
@@ -166,11 +174,19 @@ module.exports = function (help_mode) {
           entry_groups[name].push(file);
         }
         break;
+      case '-v':
+      case '--verbose':
+        ++verbosity;
+        break;
       case '--':
         break;
       default:
         fail_usage(1, 'invalid flag [' + flag +']');
     }
+  }
+
+  if (minimise_module_names && register_modules) {
+    fail_usage(1, 'Option "--minimise-module-names" is incompatible with "--register"');
   }
 
   // nodejs doesn't have an mkdir -p equivalent
@@ -203,7 +219,7 @@ module.exports = function (help_mode) {
   var bolt_build_inline = function (file, name) {
     mkdirp(path.join(output_dir, 'inline'));
     var target = path.join(output_dir, 'inline', name + '.js');
-    ephox.bolt.compiler.mode.inline.run(config_js, [ file ], target, register_modules, main);
+    ephox.bolt.compiler.mode.inline.run(config_js, [ file ], target, register_modules, main, minimise_module_names, verbosity);
   };
 
   var bolt_build_entry_point = function (done) {
