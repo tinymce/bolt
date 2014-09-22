@@ -1,3 +1,3 @@
-  if (this.ephox)
+  if (this.ephox && this.ephox.bolt)
     this.ephox.bolt = old;
 })();
