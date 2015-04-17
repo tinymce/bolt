@@ -1,45 +1,33 @@
 var defs = {}; // id -> {dependencies, definition, instance (possibly undefined)}
 
-var register = function (id) {
-  var module = dem(id);
-  var fragments = id.split('.');
-  var target = Function('return this;')();
-  for (var i = 0; i < fragments.length - 1; ++i) {
-    if (target[fragments[i]] === undefined)
-      target[fragments[i]] = {};
-    target = target[fragments[i]];
-  }
-  target[fragments[fragments.length - 1]] = module;
-};
-
 var instantiate = function (id) {
-  var dependencies = defs[id].dependencies;
-  var definition = defs[id].definition;
+  var dependencies = defs[id].deps;
+  var definition = defs[id].defn;
   var instances = [];
   for (var i = 0; i < dependencies.length; ++i)
     instances.push(dem(dependencies[i]));
   defs[id].instance = definition.apply(null, instances);
   if (defs[id].instance === undefined)
-     throw 'required module [' + id + '] could not be defined (definition function returned undefined)';
+     throw 'module [' + id + '] returned undefined';
 };
 
 var def = function (id, dependencies, definition) {
   if (typeof id !== 'string')
-    throw 'invalid module definition, module id must be defined and be a string';
+    throw 'module id must be a string';
   if (dependencies === undefined)
-    throw 'invalid module definition, dependencies must be specified';
+    throw 'no dependencies for ' + id;
   if (definition === undefined)
-    throw 'invalid module definition, definition function must be specified';
+    throw 'no definition function for ' + id;
   defs[id] = {
-    dependencies: dependencies,
-    definition: definition,
+    deps: dependencies,
+    defn: definition,
     instance: undefined
   };
 };
 
 var dem = function (id) {
   if (defs[id] === undefined)
-    throw 'required module [' + id + '] is not defined';
+    throw 'module [' + id + '] was undefined';
   if (defs[id].instance === undefined)
     instantiate(id);
   return defs[id].instance;
@@ -52,7 +40,7 @@ var req = function (ids, callback) {
   callback.apply(null, callback);
 };
 
-var ephox = this.ephox || {};
+var ephox = {};
 
 ephox.bolt = {
   module: {
@@ -64,11 +52,15 @@ ephox.bolt = {
   }
 };
 
-
 // This is here to give hints to minification
 // ephox.bolt.module.api.define
 var eeephox_def_eeephox = def;
+var define = def;
 // ephox.bolt.module.api.require
 var eeephox_req_eeephox = req;
+var require = req;
 // ephox.bolt.module.api.demand
 var eeephox_dem_eeephox = dem;
+var demand = dem;
+// ephox.bolt.module.api.require
+// ephox.bolt.module.api.demand

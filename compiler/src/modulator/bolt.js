@@ -9,12 +9,6 @@ compiler.modulator.bolt = def(
   function (metalator, io, error) {
     var create = function (pather, namespace, path, idTransformer) {
 
-      var wrap = function (s) {
-        return '(function (define, require, demand) {\n' +
-          s + '\n' +
-         '})(ephox.bolt.module.api.define, ephox.bolt.module.api.require, ephox.bolt.module.api.demand);\n';
-      };
-
       var can = function (id) {
         return id.indexOf(namespace) === 0;
       };
@@ -24,7 +18,7 @@ compiler.modulator.bolt = def(
         var content = io.lazyread(file);
 
         var render = function () {
-          return metalator.hasMetadata(file) ? content() : wrap(content());
+          return content();
         };
 
         var loadcompiled = function (define) {
