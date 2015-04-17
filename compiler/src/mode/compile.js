@@ -9,10 +9,19 @@ compiler.mode.compile = def(
   ],
 
   function (io, identifier, compiler, sources, reader, ar) {
+
+    var tlog = function () {
+      // console.log.apply(console, [new Date().toLocaleTimeString()].concat(Array.prototype.slice.call(arguments, 0)));
+    };
+
     var compile = function (source, files, target) {
+      tlog('begin');
       var modules = ar.flatmap(files, identifier.identify);
+      tlog('have modules')
       var result = compiler().compile(source, modules);
+      tlog('have result')
       io.write(target, result);
+      tlog('all done?')
     };
 
     var run = function (config, files, target, done) {

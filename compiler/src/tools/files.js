@@ -11,6 +11,7 @@ compiler.tools.files = def(
     };
 
     var files = function (relative, names) {
+      console.log('compile tools files reading ' + names.length + ' files');
       return io.readall(filenames(relative, names));
     };
 
