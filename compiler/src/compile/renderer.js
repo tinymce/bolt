@@ -11,53 +11,38 @@ compiler.compile.renderer = def(
     };
 
     var join = function (ss) {
-      // joinCount++;
       return stripempty(ss).join('\n');
     };
 
-    // var tlog = function () {
-    //   console.log.apply(console, [new Date().toLocaleTimeString()].concat(Array.prototype.slice.call(arguments, 0)));
-    // };
-
-    // var joinCount = 0;
-    // var rendererCount = 0;
-
     var render = function (ids, modules, renders) {
-      // tlog('entering render');
-      var printed = {};  // url ->  boolean
-      var order = [];
+      var found = {};  // url ->  boolean
+      var sorted = [];
 
-      var renderer = function (id) {
-        // rendererCount++;
-        if (renders[id] === undefined) throw 'undefined render for ' + id + ', deps ' + modules[id];
-
+      // traverse the dependency tree, producing a list of modules in dependency order.
+      var findDependencies = function (id) {
         var spec = renders[id];
+        if (spec === undefined) throw 'undefined render for ' + id + ', deps ' + modules[id];
+        else if (found[spec.url]) return; // already found, no need to search any further
 
-        if (printed[spec.url])
-          return;
+        // recursively search this module's dependencies
+        var deps = modules[id];
+        ar.each(deps, findDependencies);
 
-        var dependencies = modules[id];
-        ar.each(dependencies, renderer);
-
-        printed[spec.url] = true;
-        // tlog('adding', id);
-        order.push(id);
+        // mark this module as found, and add it to the list
+        found[spec.url] = true;
+        sorted.push(id);
       };
 
-      ar.each(ids, renderer);
+      ar.each(ids, findDependencies);
 
-      // tlog('rendering ' + order.length + ' modules');
-      var thing = order.map(function (id) {
+      var rendered = sorted.map(function (id) {
         return renders[id].render();
       });
-      // tlog('done');
 
-      return join(thing) + '\n';
+      return join(rendered) + '\n';
     };
 
     return {
-      // joinCount: function () { return joinCount; },
-      // rendererCount: function () { return rendererCount; },
       render: render
     };
   }
