@@ -5,14 +5,7 @@ compiler.inspect.identifier = def(
   ],
 
   function (io, error) {
-
-
-    var tlog = function () {
-      // console.log.apply(console, [new Date().toLocaleTimeString()].concat(Array.prototype.slice.call(arguments, 0)));
-    };
-
     var indentify = function (file) {
-      tlog('compile inspect identifier identify reading ', file);
       var content = io.read(file);
       var ids = [];
       // eval scope

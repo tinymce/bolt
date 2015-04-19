@@ -40,27 +40,16 @@ compiler.compile.compiler = def(
           error.die('Configuration error: module [' + id + '] was not loaded from expected source');
       };
 
-      var tlog = function () {
-        // console.log.apply(console, [new Date().toLocaleTimeString()].concat(Array.prototype.slice.call(arguments, 0)));
-      };
-
       var compile = function (sources, ids) {
-        tlog('in compiler');
         var loader = fn.curry(checkedload, sources);
-        tlog('before analyse');
         var results = analyse(ids);
-        tlog('after analyse, looping ' + results.load.length);
         while (results.load.length > 0) {
           results.load.forEach(loader);
           results = analyse(ids);
         }
         var all = obj.keys(modules);
-        tlog('about to render metalator');
         var header = metalator.render(all); // FIX consider separating all ids vs specified ids.
-        tlog('about to render renderer. ids :: modules :: renders ' + ids.length + ' ids, ' + obj.keys(modules).length + ' modules, ' + obj.keys(renders).length + ' renders');
-        var r = header + renderer.render(ids, modules, renders);
-        // tlog('render did ' + renderer.joinCount() + ' joins, ' + renderer.rendererCount() + ' renderer calls');
-        return r;
+        return header + renderer.render(ids, modules, renders);
       };
 
       return {

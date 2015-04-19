@@ -28,7 +28,6 @@ compiler.inspect.metalator = def(
 
     var inspect = function (file) {
       guard(file);
-      // console.log('compile inspect metalator inspect reading ' + file);
       var content = io.read(file);
       var end = content.indexOf('jsc*/');
       if (end === -1)

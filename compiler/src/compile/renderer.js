@@ -39,7 +39,7 @@ compiler.compile.renderer = def(
         return renders[id].render();
       });
 
-      return join(rendered) + '\n';
+      return join(rendered);
     };
 
     return {

@@ -16,7 +16,6 @@ compiler.mode.inline = def(
     };
 
     var readall = function (files) {
-      // console.log('compile mode inline reading ' + files.length + ' files');
       var read = io.readall(files);
       return read.join('\n');
     };
