@@ -18,7 +18,7 @@ compiler.inspect.metalator = def(
     var cachedHasMetadata = {};
 
     var hasMetadata = function (file) {
-      if (cachedHasMetadata[file] === undefined) {
+      if (!cachedHasMetadata.hasOwnProperty(file)) {
         var content = io.read(file);
         cachedHasMetadata[file] = content.indexOf('/*jsc') === 0;
       }

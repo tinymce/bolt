@@ -22,7 +22,7 @@ compiler.compile.renderer = def(
       var findDependencies = function (id) {
         var spec = renders[id];
         if (spec === undefined) throw 'undefined render for ' + id + ', deps ' + modules[id];
-        else if (found[spec.url]) return; // already found, no need to search any further
+        else if (found[spec.url] === true) return; // already found, no need to search any further
 
         // recursively search this module's dependencies
         var deps = modules[id];
