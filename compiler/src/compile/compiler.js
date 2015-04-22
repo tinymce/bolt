@@ -29,7 +29,7 @@ compiler.compile.compiler = def(
           modules[id] = dependencies;
         });
       };
-      
+
       var checkedload = function (sources, id) {
         if (!sources.can(id))
           error.die('Configuration error: no source found to load module: ' + id);

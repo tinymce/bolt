@@ -15,25 +15,31 @@ compiler.compile.renderer = def(
     };
 
     var render = function (ids, modules, renders) {
-      var printed = {};  // url ->  boolean
+      var found = {};  // url ->  boolean
+      var sorted = [];
 
-      var renderer = function (id) {
-        var dependencies = modules[id];
-        var deps = dependencies.map(renderer);
-
-        if (renders[id] === undefined)
-          return join(deps);
-
+      // traverse the dependency tree, producing a list of modules in dependency order.
+      var findDependencies = function (id) {
         var spec = renders[id];
+        if (spec === undefined) throw 'undefined render for ' + id + ', deps ' + modules[id];
+        else if (found[spec.url] === true) return; // already found, no need to search any further
 
-        if (printed[spec.url])
-          return join(deps);
+        // recursively search this module's dependencies
+        var deps = modules[id];
+        ar.each(deps, findDependencies);
 
-        printed[spec.url] = true;
-        return join(deps) + '\n' + spec.render();
+        // mark this module as found, and add it to the list
+        found[spec.url] = true;
+        sorted.push(id);
       };
 
-      return join(ids.map(renderer)) + '\n';
+      ar.each(ids, findDependencies);
+
+      var rendered = sorted.map(function (id) {
+        return renders[id].render();
+      });
+
+      return join(rendered);
     };
 
     return {

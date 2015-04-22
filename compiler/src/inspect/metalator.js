@@ -15,9 +15,15 @@ compiler.inspect.metalator = def(
       return '/*jsc\n' + JSON.stringify(ids) + '\njsc*/\n';
     };
 
+    var cachedHasMetadata = {};
+
     var hasMetadata = function (file) {
-      var content = io.read(file);
-      return content.indexOf('/*jsc') === 0;
+      if (!cachedHasMetadata.hasOwnProperty(file)) {
+        var content = io.read(file);
+        cachedHasMetadata[file] = content.indexOf('/*jsc') === 0;
+      }
+
+      return cachedHasMetadata[file];
     };
 
     var inspect = function (file) {
