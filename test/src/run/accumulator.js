@@ -46,8 +46,13 @@ test.run.accumulator = def(
       };
     };
 
+    var length = function () {
+      return tests.length;
+    };
+
     return {
       more: more,
+      length: length,
       take: take,
       drain: drain,
       register: register
