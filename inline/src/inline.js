@@ -4,12 +4,14 @@ var instantiate = function (id) {
   var actual = defs[id];
   var dependencies = actual.deps;
   var definition = actual.defn;
-  var instances = [];
-  for (var i = 0; i < dependencies.length; ++i)
-    instances.push(dem(dependencies[i]));
-  actual.instance = definition.apply(null, instances);
-  if (actual.instance === undefined)
+  var len = dependencies.length;
+  var instances = new Array(len);
+  for (var i = 0; i < len; ++i)
+    instances[i] = dem(dependencies[i]);
+  var defResult = definition.apply(null, instances);
+  if (defResult === undefined)
      throw 'module [' + id + '] returned undefined';
+  actual.instance = defResult;
 };
 
 var def = function (id, dependencies, definition) {
@@ -36,8 +38,9 @@ var dem = function (id) {
 };
 
 var req = function (ids, callback) {
-  var instances = [];
-  for (var i = 0; i < ids.length; ++i)
+  var len = ids.length;
+  var instances = new Array(len);
+  for (var i = 0; i < len; ++i)
     instances.push(dem(ids[i]));
   callback.apply(null, callback);
 };
