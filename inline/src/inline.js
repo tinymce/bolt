@@ -1,22 +1,23 @@
 var defs = {}; // id -> {dependencies, definition, instance (possibly undefined)}
 
 var instantiate = function (id) {
-  var dependencies = defs[id].deps;
-  var definition = defs[id].defn;
+  var actual = defs[id];
+  var dependencies = actual.deps;
+  var definition = actual.defn;
   var instances = [];
   for (var i = 0; i < dependencies.length; ++i)
     instances.push(dem(dependencies[i]));
-  defs[id].instance = definition.apply(null, instances);
-  if (defs[id].instance === undefined)
+  actual.instance = definition.apply(null, instances);
+  if (actual.instance === undefined)
      throw 'module [' + id + '] returned undefined';
 };
 
 var def = function (id, dependencies, definition) {
   if (typeof id !== 'string')
     throw 'module id must be a string';
-  if (dependencies === undefined)
+  else if (dependencies === undefined)
     throw 'no dependencies for ' + id;
-  if (definition === undefined)
+  else if (definition === undefined)
     throw 'no definition function for ' + id;
   defs[id] = {
     deps: dependencies,
@@ -26,11 +27,12 @@ var def = function (id, dependencies, definition) {
 };
 
 var dem = function (id) {
-  if (defs[id] === undefined)
+  var actual = defs[id];
+  if (actual === undefined)
     throw 'module [' + id + '] was undefined';
-  if (defs[id].instance === undefined)
+  else if (actual.instance === undefined)
     instantiate(id);
-  return defs[id].instance;
+  return actual.instance;
 };
 
 var req = function (ids, callback) {
