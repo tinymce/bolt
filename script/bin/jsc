@@ -1,5 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env node
 
-base="`(readlink "$0" || printf "%s" "$0") | xargs dirname`"
+# super simple bootstrap, basically a symlink
 
-exec node "$base/jsc.js" "$@"
+require("jsc.js")
