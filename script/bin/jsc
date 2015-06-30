@@ -1,5 +1,0 @@
-#!/usr/bin/env node
-
-# super simple bootstrap, basically a symlink
-
-require("jsc.js")

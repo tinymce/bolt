@@ -1,0 +1,23 @@
+{
+  "name": "bolt-ephox",
+  "version": "1.5.0",
+  "description": "Bolt, AMD module system for JavaScript",
+  "bin": {
+    "bolt": "gen/image/bolt-local/bin/bolt.js",
+    "jsc": "gen/image/bolt-local/bin/jsc.js"
+  },
+  "main": "gen/image/bolt-local/bin/bolt.js",
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@stash:7999/bolt/bolt.git"
+  },
+  "author": "Ephox",
+  "license": "BSD-3-Clause"
+}
