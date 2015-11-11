@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@stash:7999/bolt/bolt.git"
+    "url": "https://github.com/ephox/bolt"
   },
   "author": "Ephox",
   "license": "BSD-3-Clause"
