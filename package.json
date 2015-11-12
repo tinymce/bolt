@@ -1,7 +1,7 @@
 {
-  "name": "bolt-ephox",
+  "name": "ephox-bolt",
   "version": "1.5.0",
-  "description": "Bolt, AMD module system for JavaScript",
+  "description": "Bolt, AMD-like module system for JavaScript",
   "bin": {
     "bolt": "gen/image/bolt-local/bin/bolt.js",
     "jsc": "gen/image/bolt-local/bin/jsc.js"
@@ -12,7 +12,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Just run make\" && exit 1"
   },
   "repository": {
     "type": "git",
