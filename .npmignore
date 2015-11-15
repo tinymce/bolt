@@ -5,7 +5,6 @@
 /lib
 /dist
 /scratch
-/gen
 /dependency
 /config/bolt/bootstrap*.js
 /inconsistent.dependencies
