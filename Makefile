@@ -26,6 +26,7 @@ ${VERSION_FILE}: ${TAR_IMAGE}
 
 projects: ${DIST} ${TAR_IMAGE}/bin ${TAR_IMAGE}/command ${TAR_IMAGE}/lib ${VERSION_FILE}
 	for x in ${PROJECTS}; do (cd $$x && ${MAKE} $(MFLAGS) dist) && cp $$x/gen/* ${TAR_IMAGE}/lib/.; done
+	cp config/npm/package.json README.md LICENSE ${TAR_IMAGE}/
 	cp script/bin/* ${TAR_IMAGE}/bin/.
 	cp script/command/* ${TAR_IMAGE}/command/.
 
