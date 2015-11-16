@@ -85,5 +85,7 @@ module.exports = function (help_mode) {
     tests: tests
   };
 
-  require('../npm/bolt').test(boltConfig);
+  require('../npm/bolt').test(boltConfig, function (success) {
+    process.exit(success ? 0 : 1);
+  });
 };

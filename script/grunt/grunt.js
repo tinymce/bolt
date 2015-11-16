@@ -5,29 +5,44 @@ module.exports = function(grunt) {
     grunt.log.debug('task', this.name, '::', this.target, '::', process.cwd() + '/.', '::', config, '::', this.filesSrc);
     grunt.log.debug('running options:', this.options());
 
-    config.reporter = {
-      level: "debug",
+    // var reporter = {
+    //   level: "debug",
 
-      debug: function(message) {
-        grunt.log.debug(message);
-      },
+    //   debug: function(message) {
+    //     grunt.log.debug(message);
+    //   },
 
-      info: function(message) {
-        grunt.log.ok(message);
-      },
+    //   info: function(message) {
+    //     grunt.log.ok(message);
+    //   },
 
-      warning: function(message) {
-        grunt.fail.warn(message);
-      },
+    //   warning: function(message) {
+    //     grunt.fail.warn(message);
+    //   },
 
-      error: function(message) {
-        grunt.log.error(message);
-      },
+    //   error: function(message) {
+    //     grunt.log.error(message);
+    //   },
 
-      fatal: function(message) {
-        grunt.log.error(message);
-      }
+    //   fatal: function(message) {
+    //     grunt.log.error(message);
+    //   }
+    // };
+    // TODO: Pass log tool into other parts of the code instead of doing this
+    var oldLog = {
+      log: console.log,
+      error: console.error
     };
+    console.log = function (m) { grunt.log.ok(m); };
+    console.error = function (m) { grunt.log.error(m); };
+
+    var done = this.async();
+    var callback = function (status) {
+      console.log = oldLog.log;
+      console.error = oldLog.error;
+      done(status);
+    };
+
 
     var bolt = require("../npm/bolt");
 
@@ -41,7 +56,7 @@ module.exports = function(grunt) {
 
         // adapt between grunt file normalisation and bolt internal config
         config.tests = this.filesSrc;
-        bolt.test(config);
+        bolt.test(config, callback);
         break;
       default:
         grunt.fatal('There is no bolt target ' + this.target);
