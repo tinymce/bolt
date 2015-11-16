@@ -6,7 +6,7 @@
     "bolt": "./bin/bolt.js",
     "jsc": "./bin/jsc.js"
   },
-  "main": "./bin/bolt.js",
+  "main": "./npm/bolt.js",
   "directories": {
     "doc": "doc",
     "test": "test"

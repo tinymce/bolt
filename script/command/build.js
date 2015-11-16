@@ -185,6 +185,10 @@ module.exports = function (help_mode) {
     }
   }
 
+  var boltConfig = {};
+
+  require('../npm/entry').build(boltConfig);
+
   if (minimise_module_names && register_modules) {
     fail_usage(1, 'Option "--minimise-module-names" is incompatible with "--register"');
   }

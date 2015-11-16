@@ -79,17 +79,11 @@ module.exports = function (help_mode) {
       fail(20, 'Could not find test file [' + file + ']');
   });
 
+  var boltConfig = {
+    verbose: verbose,
+    config: config,
+    tests: tests
+  };
 
-  require('./../lib/kernel');
-  require('./../lib/loader');
-  require('./../lib/module');
-  require('./../lib/test');
-
-  var runner = ephox.bolt.test.run.runner;
-  var reporter = ephox.bolt.test.report.logger.create(verbose === 'true');
-  var fn = ephox.bolt.kernel.fp.functions;
-  var node = ephox.bolt.module.reader.node;
-  var reader = fn.curry(node.read, process.cwd() + '/.', config);
-
-  runner.run(reporter, reader, tests);
+  require('../npm/bolt').test(boltConfig);
 };
