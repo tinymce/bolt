@@ -11,23 +11,11 @@ Bolt is open source under a [BSD style license](https://raw.github.com/ephox/bol
 
 # Getting Bolt
 
-## Dependencies
-
-Bolt relies on node.js v0.8+ which can be obtained from [http://nodejs.org](http://nodejs.org/#download)
-or your systems package manager.
-
-## Distribution
-
-The latest release tar can be obtained from <https://github.com/ephox/bolt/downloads>.
-
-To start using bolt, unpack the tar and put bolt on the path. For example:
-
 <pre>
-tar xfz bolt-*.tar.gz
-sudo ln -s `pwd`/bolt-*/bin/bolt /usr/local/bin/bolt
-sudo ln -s `pwd`/bolt-*/bin/jsc /usr/local/bin/jsc
+npm install -g @ephox/bolt
 </pre>
 
+This will add the `bolt` command to your path.
 
 ## Source
 
@@ -41,7 +29,7 @@ cd bolt
 make
 </pre>
 
-The distribution tar can then be found in gen/dist/bolt-local.tar.gz, or unpacked in
+A distribution tar can then be found in gen/dist/bolt-local.tar.gz, or unpacked in
 gen/image/bolt-local.
 
 
