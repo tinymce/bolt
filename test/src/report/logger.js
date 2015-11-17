@@ -6,16 +6,13 @@ test.report.logger = def(
   ],
 
   function (errors, timer, namer) {
-    var create = function (verbose, callback) {
+
+    var create = function (verbose, log, errorlog, callback) {
       var initial = new Date();
       var times = {};
       var passed = 0;
       var failed = 0;
       var starttime = 0;
-
-      var log = console.log;
-
-      var errorLog = console.error;
 
       var vlog = function () {
         if (verbose)

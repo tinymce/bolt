@@ -2,10 +2,11 @@ require('./../lib/kernel');
 require('./../lib/loader');
 require('./../lib/module');
 
-var test = function (config, callback) {
+var test = function (config, log, error, callback) {
   require('./../lib/test');
+
   var runner = ephox.bolt.test.run.runner;
-  var reporter = ephox.bolt.test.report.logger.create(config.verbose, callback);
+  var reporter = ephox.bolt.test.report.logger.create(config.verbose, log, error, callback);
   var fn = ephox.bolt.kernel.fp.functions;
   var node = ephox.bolt.module.reader.node;
   var reader = fn.curry(node.read, process.cwd() + '/.', config.config);

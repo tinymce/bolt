@@ -6,6 +6,8 @@ module.exports = function(grunt) {
 
     var config = grunt.config([this.name, this.target]);
 
+    this.requiresConfig([this.name, this.target, 'files']);
+
     // adapt between grunt file normalisation and bolt internal config
     config.entry_groups = {};
     config.entry_groups[this.target] = this.filesSrc;
@@ -21,23 +23,9 @@ module.exports = function(grunt) {
     this.requiresConfig([this.name, this.target, 'config']);
     this.requiresConfig([this.name, this.target, 'files']);
 
-    // TODO: use a bolt-wide logging framework for tests as build does. This is bad.
-    var oldLog = {
-      log: console.log,
-      error: console.error
-    };
-    console.log = grunt.log.ok;
-    console.error = grunt.log.error;
-
-    var callback = function (success) {
-      console.log = oldLog.log;
-      console.error = oldLog.error;
-      done(success);
-    };
-
     // adapt between grunt file normalisation and bolt internal config
     config.tests = this.filesSrc;
 
-    bolt.test(config, callback);
+    bolt.test(config, grunt.log.ok, grunt.log.error, done);
   });
 };
