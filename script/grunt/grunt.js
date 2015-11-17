@@ -28,31 +28,40 @@ module.exports = function(grunt) {
     //     grunt.log.error(message);
     //   }
     // };
-    // TODO: Pass log tool into other parts of the code instead of doing this
-    var oldLog = {
-      log: console.log,
-      error: console.error
-    };
-    console.log = function (m) { grunt.log.ok(m); };
-    console.error = function (m) { grunt.log.error(m); };
-
     var done = this.async();
-    var callback = function (status) {
-      console.log = oldLog.log;
-      console.error = oldLog.error;
-      done(status);
-    };
-
 
     var bolt = require("../npm/bolt");
 
     switch (this.target) {
       case 'build':
-        bolt.build(config);
+        this.requiresConfig('bolt.build.project');
+
+        config.entry_groups = {};
+        config.entry_groups[config.project] = this.filesSrc;
+
+        bolt.build(config, grunt.log.error, function (success) {
+          console.trace('build complete');
+          done(success);
+        });
         break;
       case 'test':
         this.requiresConfig('bolt.test.config');
         this.requiresConfig('bolt.test.files');
+
+        // TODO: use a bolt-wide logging framework for tests too
+        var oldLog = {
+          log: console.log,
+          error: console.error
+        };
+        console.debug = console.log;
+        console.log = grunt.log.ok;
+        console.error = grunt.log.error;
+
+        var callback = function (success) {
+          console.log = oldLog.log;
+          console.error = oldLog.error;
+          done(success);
+        };
 
         // adapt between grunt file normalisation and bolt internal config
         config.tests = this.filesSrc;

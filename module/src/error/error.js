@@ -4,7 +4,7 @@ module.error.error = def(
 
   function () {
     var die = function (msg) {
-      throw msg;
+      throw msg || new Error('unknown error');
     };
 
     return {

@@ -28,6 +28,7 @@ var usage = function () {
          '  could be used as a substitute.\n';
 };
 
+/* jshint node:true */
 var fail_usage = function (code, message) {
   console.error(message);
   console.error('');
