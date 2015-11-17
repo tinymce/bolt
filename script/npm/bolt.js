@@ -175,10 +175,9 @@ var build = function (config, error, exit) {
       if (generate_modules) {
         bolt_modules();
       }
+      exit(0);
     });
   });
-
-  exit(0);
 };
 
 module.exports = {
