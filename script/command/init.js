@@ -11,18 +11,13 @@ var usage = function () {
          '    bolt init\n';
 };
 
+/* jshint node:true */
 var fail_usage = function (code, message) {
   console.error(message);
   console.error('');
   console.error(usage());
   process.exit(code);
 };
-
-var fail = function (code, message) {
-  console.error(message);
-  process.exit(code);
-};
-
 
 module.exports = function (help_mode) {
   if (help_mode) {

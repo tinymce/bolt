@@ -2,6 +2,7 @@ NAME = compiler
 MODULES = \
 	${SRC}/prelude/namespace.js \
 	${SRC}/tools/error.js \
+	${SRC}/tools/defaults.js \
 	${SRC}/tools/io.js \
 	${SRC}/tools/files.js \
 	${SRC}/minibolt/minibolt.js \
