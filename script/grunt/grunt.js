@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
   var bolt = require("../npm/bolt");
 
-  grunt.registerMultiTask("bbuild", "Bolt build task", function () {
+  grunt.registerMultiTask("bolt-build", "Bolt build task", function () {
     var done = this.async();
 
     var config = grunt.config([this.name, this.target]);
@@ -15,7 +15,7 @@ module.exports = function(grunt) {
     bolt.build(config, grunt.log.error, done);
   });
 
-  grunt.registerMultiTask("btest", "Bolt test task", function () {
+  grunt.registerMultiTask("bolt-test", "Bolt test task", function () {
     var done = this.async();
 
     var config = grunt.config([this.name, this.target]);
