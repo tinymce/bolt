@@ -62,15 +62,6 @@ ephox.bolt = {
   }
 };
 
-// This is here to give hints to minification
-// ephox.bolt.module.api.define
-var eeephox_def_eeephox = def;
 var define = def;
-// ephox.bolt.module.api.require
-var eeephox_req_eeephox = req;
 var require = req;
-// ephox.bolt.module.api.demand
-var eeephox_dem_eeephox = dem;
 var demand = dem;
-// ephox.bolt.module.api.require
-// ephox.bolt.module.api.demand
