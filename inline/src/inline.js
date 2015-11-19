@@ -45,6 +45,11 @@ var req = function (ids, callback) {
   callback.apply(null, callback);
 };
 
+// this helps a lot with minificiation when using a lot of global references
+var defineGlobal = function (id, ref) {
+  define(id, [], function () { return ref; });
+};
+
 var ephox = {};
 
 ephox.bolt = {

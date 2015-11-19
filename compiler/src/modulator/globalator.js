@@ -10,12 +10,12 @@ compiler.modulator.globalator = def(
 
       var renderNormal = function (id, globalid) {
         return function () {
-          return 'ephox.bolt.module.api.define("' + id + '", [], function () { return ' + globalid + '; });';
+          return 'defineGlobal("' + id + '", ' + globalid + ');';
         };
       };
 
       var renderConsole = function () {
-        return 'ephox.bolt.module.api.define("global!console", [], function () { if (typeof console === "undefined") console = { log: function () {} }; return console; });';
+        return 'define("global!console", [], function () { if (typeof console === "undefined") console = { log: function () {} }; return console; });';
       };
 
       var get = function (id) {
