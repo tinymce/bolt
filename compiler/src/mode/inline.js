@@ -56,10 +56,11 @@ compiler.mode.inline = def(
       };
 
       if (minimiseModuleNames) {
+        inline.generate(target + '.raw.js', result);
         doMinimiseModuleNames();
       }
 
-      inline.generate(target, result);
+      inline.generate(target + '.js', result);
     };
 
     return {
