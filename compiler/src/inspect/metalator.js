@@ -39,10 +39,7 @@ compiler.inspect.metalator = def(
 
     var boltmodules = function (file) {
       guard(file);
-      var all = inspect(file);
-      return ar.filter(all, function (id) {
-         return id.indexOf('!') === -1;
-      });
+      return inspect(file);
     };
 
     var spec = function (file) {
