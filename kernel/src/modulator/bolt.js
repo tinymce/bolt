@@ -6,7 +6,7 @@ kernel.modulator.bolt = def(
   function (fn) {
     var create = function (loader, pather, namespace, path, idTransformer, options) {
       var can = function (id) {
-        return id === namespace || id.indexOf(namespace + '.') === 0;
+        return id === namespace || id.indexOf(namespace + '.') === 0 || id.indexOf(namespace + '/') === 0;
       };
 
       var get = function (id) {
