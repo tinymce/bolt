@@ -94,7 +94,7 @@ var build = function (config, error, exit) {
 
   var bolt_build_inline = function (file, name) {
     mkdirp(path.join(output_dir, 'inline'));
-    var target = path.join(output_dir, 'inline', name + '.js');
+    var target = path.join(output_dir, 'inline', name);
     ephox.bolt.compiler.mode.inline.run(config_js, [ file ], target, register_modules, main, minimise_module_names, verbosity);
   };
 

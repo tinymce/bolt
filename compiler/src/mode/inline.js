@@ -55,23 +55,12 @@ compiler.mode.inline = def(
         });
       };
 
-      var doMinimiseWrapperReferences = function () {
-        // these are defined in the following file:
-        //      inline/src/inline.js
-        var def = 'eeephox_def_eeephox';
-        var req = 'eeephox_req_eeephox';
-        var dem = 'eeephox_dem_eeephox';
-        result = result.replace(new RegExp('ephox\\.bolt\\.module\\.api\\.define', 'g'), def);
-        result = result.replace(new RegExp('ephox\\.bolt\\.module\\.api\\.require', 'g'), req);
-        result = result.replace(new RegExp('ephox\\.bolt\\.module\\.api\\.demand', 'g'), dem);
-      };
-
       if (minimiseModuleNames) {
+        inline.generate(target + '.raw.js', result);
         doMinimiseModuleNames();
-        doMinimiseWrapperReferences();
       }
 
-      inline.generate(target, result);
+      inline.generate(target + '.js', result);
     };
 
     return {

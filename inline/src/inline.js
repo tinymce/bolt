@@ -1,58 +1,56 @@
 var defs = {}; // id -> {dependencies, definition, instance (possibly undefined)}
 
-var register = function (id) {
-  var module = dem(id);
-  var fragments = id.split('.');
-  var target = Function('return this;')();
-  for (var i = 0; i < fragments.length - 1; ++i) {
-    if (target[fragments[i]] === undefined)
-      target[fragments[i]] = {};
-    target = target[fragments[i]];
-  }
-  target[fragments[fragments.length - 1]] = module;
-};
-
 var instantiate = function (id) {
-  var dependencies = defs[id].dependencies;
-  var definition = defs[id].definition;
-  var instances = [];
-  for (var i = 0; i < dependencies.length; ++i)
-    instances.push(dem(dependencies[i]));
-  defs[id].instance = definition.apply(null, instances);
-  if (defs[id].instance === undefined)
-     throw 'required module [' + id + '] could not be defined (definition function returned undefined)';
+  var actual = defs[id];
+  var dependencies = actual.deps;
+  var definition = actual.defn;
+  var len = dependencies.length;
+  var instances = new Array(len);
+  for (var i = 0; i < len; ++i)
+    instances[i] = dem(dependencies[i]);
+  var defResult = definition.apply(null, instances);
+  if (defResult === undefined)
+     throw 'module [' + id + '] returned undefined';
+  actual.instance = defResult;
 };
 
 var def = function (id, dependencies, definition) {
   if (typeof id !== 'string')
-    throw 'invalid module definition, module id must be defined and be a string';
-  if (dependencies === undefined)
-    throw 'invalid module definition, dependencies must be specified';
-  if (definition === undefined)
-    throw 'invalid module definition, definition function must be specified';
+    throw 'module id must be a string';
+  else if (dependencies === undefined)
+    throw 'no dependencies for ' + id;
+  else if (definition === undefined)
+    throw 'no definition function for ' + id;
   defs[id] = {
-    dependencies: dependencies,
-    definition: definition,
+    deps: dependencies,
+    defn: definition,
     instance: undefined
   };
 };
 
 var dem = function (id) {
-  if (defs[id] === undefined)
-    throw 'required module [' + id + '] is not defined';
-  if (defs[id].instance === undefined)
+  var actual = defs[id];
+  if (actual === undefined)
+    throw 'module [' + id + '] was undefined';
+  else if (actual.instance === undefined)
     instantiate(id);
-  return defs[id].instance;
+  return actual.instance;
 };
 
 var req = function (ids, callback) {
-  var instances = [];
-  for (var i = 0; i < ids.length; ++i)
+  var len = ids.length;
+  var instances = new Array(len);
+  for (var i = 0; i < len; ++i)
     instances.push(dem(ids[i]));
   callback.apply(null, callback);
 };
 
-var ephox = this.ephox || {};
+// this helps a lot with minificiation when using a lot of global references
+var defineGlobal = function (id, ref) {
+  define(id, [], function () { return ref; });
+};
+
+var ephox = {};
 
 ephox.bolt = {
   module: {
@@ -64,11 +62,6 @@ ephox.bolt = {
   }
 };
 
-
-// This is here to give hints to minification
-// ephox.bolt.module.api.define
-var eeephox_def_eeephox = def;
-// ephox.bolt.module.api.require
-var eeephox_req_eeephox = req;
-// ephox.bolt.module.api.demand
-var eeephox_dem_eeephox = dem;
+var define = def;
+var require = req;
+var demand = dem;
