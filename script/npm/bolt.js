@@ -2,6 +2,35 @@ require('./../lib/kernel');
 require('./../lib/loader');
 require('./../lib/module');
 
+var init = function (config, error, exit) {
+  var fail = function (message) {
+    error(message);
+    exit(false);
+  };
+
+  require('./../lib/compiler');
+  var fs = require('fs');
+
+  var config_dir = config.config_dir || 'config/bolt';
+
+  if (!fs.existsSync(config_dir))
+    fs.mkdirSync(config_dir);
+  else if (!fs.statSync(config_dir).isDirectory())
+    fail('directory specified for CONFIG_DIR exists but is not a directory');
+
+  var files = fs.readdirSync(config_dir).filter(function (file) {
+    return fs.statSync(config_dir + '/' + file).isFile() &&
+           file.indexOf('bootstrap') !== 0 &&
+           file.length > 3 && file.lastIndexOf('.js') === file.length - 3;
+  });
+
+  files.forEach(function (file) {
+    var config = config_dir + '/' + file;
+    var bootstrap = config_dir + '/bootstrap-' + file;
+    ephox.bolt.compiler.mode.dev.run(config, bootstrap);
+  });
+};
+
 var test = function (config, log, error, callback) {
   require('./../lib/test');
 
@@ -181,6 +210,7 @@ var build = function (config, error, exit) {
 };
 
 module.exports = {
+  init: init,
   build: build,
   test: test
 };

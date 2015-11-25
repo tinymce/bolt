@@ -1,6 +1,14 @@
 module.exports = function(grunt) {
   var bolt = require("../npm/bolt");
 
+  grunt.registerMultiTask("bolt-init", "Bolt init task", function () {
+    var done = this.async();
+
+    var config = grunt.config([this.name, this.target]);
+
+    bolt.init(config, grunt.log.error, done);
+  });
+
   grunt.registerMultiTask("bolt-build", "Bolt build task", function () {
     var done = this.async();
 

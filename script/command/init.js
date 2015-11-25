@@ -25,7 +25,8 @@ module.exports = function (help_mode) {
     process.exit();
   }
 
-  var config_dir = 'config/bolt';
+  var boltConfig = {
+  };
 
   while (process.argv.length > 0 && process.argv[0][0] === '-') {
     var flag = process.argv[0];
@@ -36,7 +37,7 @@ module.exports = function (help_mode) {
       case '--config':
         if (process.argv.length < 1)
           fail_usage(1, flag + ' requires an argument to be specified');
-        config_dir = process.argv[0];
+        boltConfig.config_dir = process.argv[0];
         process.argv.shift();
         break;
       case '--':
@@ -46,28 +47,5 @@ module.exports = function (help_mode) {
     }
   }
 
-
-  require('./../lib/kernel');
-  require('./../lib/loader');
-  require('./../lib/module');
-  require('./../lib/compiler');
-
-  var fs = require('fs');
-
-  if (!fs.existsSync(config_dir))
-    fs.mkdirSync(config_dir);
-  else if (!fs.statSync(config_dir).isDirectory())
-    fail_usage(2, 'directory specified for CONFIG_DIR exists but is not a directory');
-
-  var files = fs.readdirSync(config_dir).filter(function (file) {
-    return fs.statSync(config_dir + '/' + file).isFile() &&
-           file.indexOf('bootstrap') !== 0 &&
-           file.length > 3 && file.lastIndexOf('.js') === file.length - 3;
-  });
-
-  files.forEach(function (file) {
-    var config = config_dir + '/' + file;
-    var bootstrap = config_dir + '/bootstrap-' + file;
-    ephox.bolt.compiler.mode.dev.run(config, bootstrap);
-  });
+  require('../npm/bolt').init(boltConfig, console.error, process.exit);
 };
