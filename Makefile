@@ -42,6 +42,15 @@ ${TAR}: projects
 ${DIRECTORIES}:
 	mkdir -p $@
 
+publish:
+ifeq ($(VERSION),local)
+	@echo "No version supplied. Use 'make publish VERSION=<semver>'"
+	@exit 1
+else
+	make clean projects
+	npm publish ${TAR_IMAGE}
+endif
+
 clean:
 	rm -rf ./${GEN}
 	for x in ${PROJECTS}; do (cd $$x && ${MAKE} $(MFLAGS) clean); done
