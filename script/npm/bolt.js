@@ -29,13 +29,14 @@ var init = function (config, error, exit) {
     var bootstrap = config_dir + '/bootstrap-' + file;
     ephox.bolt.compiler.mode.dev.run(config, bootstrap);
   });
+  exit(true);
 };
 
-var test = function (config, log, error, callback) {
+var test = function (config, log, error, exit) {
   require('./../lib/test');
 
   var runner = ephox.bolt.test.run.runner;
-  var reporter = ephox.bolt.test.report.logger.create(config.verbose, log, error, callback);
+  var reporter = ephox.bolt.test.report.logger.create(config.verbose, log, error, exit);
   var fn = ephox.bolt.kernel.fp.functions;
   var node = ephox.bolt.module.reader.node;
   var reader = fn.curry(node.read, process.cwd() + '/.', config.config);
@@ -204,7 +205,7 @@ var build = function (config, error, exit) {
       if (generate_modules) {
         bolt_modules();
       }
-      exit(0);
+      exit(true);
     });
   });
 };
