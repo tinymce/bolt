@@ -23,18 +23,19 @@ compiler.mode.inline = def(
     var run = function (config, files, target, registermodules, main, minimiseModuleNames, verbosity) {
       // moved register inside this function so we have access to the list of IDs for obfuscation
       var ids = ar.flatmap(files, metalator.boltmodules);
-      var register = function (files) {
+      var register = function (ids) {
         return ar.map(ids, function (id) {
-          return 'register(\'' + id + '\');';
+          // unique name defined in inline/src/inline.js
+          return 'register_3795(\'' + id + '\');';
         }).join('\n');
       };
 
       var result = readall(files);
-      if (registermodules || main === undefined)
-        result += '\n' + register(files);
-
-      if (main !== undefined)
+      if (registermodules || main === undefined) {
+        result += '\n' + register(ids);
+      } else {
         result += '\ndem(\'' + main + '\')();';
+      }
 
       var doMinimiseModuleNames = function () {
         var mkNextId = function() {
