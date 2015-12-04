@@ -7,7 +7,7 @@ test.report.logger = def(
 
   function (errors, timer, namer) {
 
-    var create = function (verbose, log, errorlog, callback) {
+    var create = function (verbose, log, errorLog, callback) {
       var initial = new Date();
       var times = {};
       var passed = 0;
