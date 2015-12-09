@@ -178,5 +178,9 @@ module.exports = function (help_mode) {
     }
   }
 
-  require('../npm/bolt').build(boltConfig, console.error, process.exit);
+  var exit = function (success) {
+    process.exit(success ? 0 : 1);
+  };
+
+  require('../npm/bolt').build(boltConfig, console.error, exit);
 };

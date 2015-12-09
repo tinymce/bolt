@@ -47,5 +47,9 @@ module.exports = function (help_mode) {
     }
   }
 
-  require('../npm/bolt').init(boltConfig, console.error, process.exit);
+  var exit = function (success) {
+    process.exit(success ? 0 : 1);
+  };
+
+  require('../npm/bolt').init(boltConfig, console.error, exit);
 };
