@@ -3,7 +3,9 @@ test.report.errors = def(
   ],
 
   function (timer, namer) {
-    var clean = function (e) {
+    var clean = function (err) {
+      var e = err === undefined ? new Error('no error given') : err;
+
       if (typeof e === 'string')
         return e;
       var s = stack(e);
