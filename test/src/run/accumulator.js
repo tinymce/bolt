@@ -46,6 +46,10 @@ test.run.accumulator = def(
       };
     };
 
+    var cancel = function () {
+      tests.splice(0);
+    };
+
     var length = function () {
       return tests.length;
     };
@@ -55,7 +59,8 @@ test.run.accumulator = def(
       length: length,
       take: take,
       drain: drain,
-      register: register
+      register: register,
+      cancel: cancel
     };
   }
 );
