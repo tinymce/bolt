@@ -7,14 +7,14 @@ test.run.wrapper = def(
   function (global, assert) {
     global.assert = assert;
 
-    var resulter = function (testcase) {
+    var resulter = function (testcase, type) {
       return function (returned) {
         if (returned === undefined)
           testcase.pass();
         else if (typeof returned === 'object' && Array.prototype.isPrototypeOf(returned))
           testcase.htmlcompare(returned);
         else
-          testcase.fail('Tests must either complete with undefined or an array of HTML comparison objects');
+          testcase.fail('Success argument (or sync test return) must be either undefined or an array of HTML comparison objects');
       };
     };
 
@@ -46,9 +46,9 @@ test.run.wrapper = def(
       return function (/* arguments */) {
         var testcase = reporter.test(testfile, name);
 
-        var oncomplete = function (f) {
+        var oncomplete = function (result) {
           return function () {
-            f.apply(null, arguments);
+            result.apply(null, arguments);
             global.define = undefined;
             global.require = undefined;
             global.demand = undefined;
@@ -88,8 +88,18 @@ test.run.wrapper = def(
         throw new Error('jsdom must be installed to run dom tests')
       }
 
-      // The list of commonly used variables in DOM tests that need to be transferred from window to global
-      const variables = ["document", "window", "Node", "Image", "navigator", "alert", "NodeFilter", "XMLHttpRequest"];
+      // Transferring all properties from window to global seems like a bad idea.
+      // This is a list of commonly used variables in DOM tests that are transferred. It is expected to expand over time.
+      const variables = [
+        "document",
+        "window",
+        "Node",
+        "Image",
+        "navigator",
+        "alert",
+        "NodeFilter",
+        "XMLHttpRequest"
+      ];
 
       variables.map(function (name) {
         global[name] = window[name];
