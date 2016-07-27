@@ -35,7 +35,7 @@ test.run.accumulator = def(
         done();
     };
 
-    var register = function (testfile, syncwrapper, asyncwrapper) {
+    var register = function (testfile, syncwrapper, asyncwrapper, domwrapper) {
 
       global.test = function (name, replacements, deps, fn) {
         push(syncwrapper, testfile, name, replacements, deps, fn);
@@ -43,6 +43,10 @@ test.run.accumulator = def(
 
       global.asynctest = function (name, replacements, deps, fn) {
         push(asyncwrapper, testfile, name, replacements, deps, fn);
+      };
+
+      global.domtest = function (name, replacements, deps, fn) {
+        push(domwrapper, testfile, name, replacements, deps, fn);
       };
     };
 
