@@ -115,7 +115,7 @@ test.run.wrapper = def(
       var wrappedF = function () {
         var promise = f.apply(null, arguments);
         if (!(promise instanceof Promise)) {
-          throw 'dom tests must return a future';
+          throw 'dom tests must return a promise';
         }
         return promise;
       };
