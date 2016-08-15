@@ -16,7 +16,7 @@ test.run.runner = def(
 
       tests.forEach(function (testfile) {
         var testcase = path.resolve(testfile);
-        accumulator.register(testfile, wrapper.sync, wrapper.async);
+        accumulator.register(testfile, wrapper.sync, wrapper.async, wrapper.dom);
         require(testcase);
       });
 

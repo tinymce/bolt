@@ -7,14 +7,14 @@ test.run.wrapper = def(
   function (global, assert) {
     global.assert = assert;
 
-    var resulter = function (testcase) {
+    var resulter = function (testcase, type) {
       return function (returned) {
         if (returned === undefined)
           testcase.pass();
         else if (typeof returned === 'object' && Array.prototype.isPrototypeOf(returned))
           testcase.htmlcompare(returned);
         else
-          throw 'Tests must either return undefined or an array of HTML comparison objects';
+          testcase.fail('Success argument (or sync test return) must be either undefined or an array of HTML comparison objects');
       };
     };
 
@@ -46,9 +46,9 @@ test.run.wrapper = def(
       return function (/* arguments */) {
         var testcase = reporter.test(testfile, name);
 
-        var oncomplete = function (f) {
+        var oncomplete = function (result) {
           return function () {
-            f.apply(null, arguments);
+            result.apply(null, arguments);
             global.define = undefined;
             global.require = undefined;
             global.demand = undefined;
@@ -61,17 +61,72 @@ test.run.wrapper = def(
 
         var args = Array.prototype.slice.call(arguments, 0);
 
+        var promise;
         try {
-          f.apply(null, args.concat([ onsuccess, onfailure ]));
+          promise = f.apply(null, args.concat([ onsuccess, onfailure ]));
         } catch (e) {
           onfailure(e);
+        }
+
+        /*
+         * Ideally this would require tests to return a promise (as dom tests do) rather than
+         * passing success and failure to the test function but we have a huge number of
+         * existing tests that need to be converted first
+         */
+        if (promise instanceof Promise) {
+          promise.then(onsuccess, onfailure);
         }
       };
     };
 
+    var dom = function (reporter, testfile, name, f, next) {
+      var window;
+      // I don't want to package jsdom with bolt
+      try {
+        window = require("jsdom").jsdom().defaultView;
+      } catch (e) {
+        throw new Error('jsdom must be installed to run dom tests')
+      }
+
+      // Transferring all properties from window to global seems like a bad idea.
+      // This is a list of commonly used variables in DOM tests that are transferred. It is expected to expand over time.
+      const variables = [
+        "document",
+        "window",
+        "Node",
+        "Image",
+        "navigator",
+        "alert",
+        "NodeFilter",
+        "XMLHttpRequest"
+      ];
+
+      variables.map(function (name) {
+        global[name] = window[name];
+      });
+
+      var oncomplete = function () {
+        variables.map(function (name) {
+          global[name] = undefined;
+        });
+        next();
+      };
+
+      var wrappedF = function () {
+        var promise = f.apply(null, arguments);
+        if (!(promise instanceof Promise)) {
+          throw 'dom tests must return a promise';
+        }
+        return promise;
+      };
+
+      return async(reporter, testfile, name, wrappedF, oncomplete);
+    };
+
     return {
       sync: sync,
-      async: async
+      async: async,
+      dom: dom
     };
   }
 );
