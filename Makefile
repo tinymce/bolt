@@ -25,7 +25,7 @@ ${VERSION_FILE}: ${TAR_IMAGE}
 	echo ${VERSION} > ${VERSION_FILE}
 
 projects: ${DIST} ${TAR_IMAGE}/bin ${TAR_IMAGE}/command ${TAR_IMAGE}/lib ${VERSION_FILE}
-	for x in ${PROJECTS}; do (cd $$x && ${MAKE} $(MFLAGS) dist) && cp $$x/gen/* ${TAR_IMAGE}/lib/.; done
+	for x in ${PROJECTS}; do (cd $$x && ${MAKE} $(MFLAGS) test dist) && cp $$x/gen/* ${TAR_IMAGE}/lib/.; done
 	cp script/bin/* ${TAR_IMAGE}/bin/.
 	cp script/command/* ${TAR_IMAGE}/command/.
 	mkdir ${TAR_IMAGE}/npm

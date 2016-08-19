@@ -21,6 +21,7 @@ clean:
 	rm -rf ./${DIST}
 
 test: ${RELEASE} ${DISTFILES} ${ASSERT}
+	echo "test"
 	if [ ! -z "${DISTFILES}" ]; then mkdir -p lib;	cp ${DISTFILES} lib/.; fi
 	if [ ! -z "${MODULES}" ] && [ -d "${TEST}" ]; then find ${TEST} -type f -name \*test.js -print0 | xargs -0 -n 1 sh -c 'test=$$0; echo $$test; node $$test'; fi
 
@@ -36,6 +37,7 @@ ${ASSERT}: ../framework/components/assert.js
 	cp ../framework/components/assert.js lib/framework
 
 ${DISTFILES}:
+	# changes into each dependent library directory and runs make
 	cd `echo $@ | xargs dirname | xargs dirname` && ${MAKE} $(MFLAGS)
 
 ${RELEASE}: ${DIST} ${MODULES} ${DEPENDENCIES} ${PRELUDE} modules.in

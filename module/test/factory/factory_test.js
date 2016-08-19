@@ -1,4 +1,4 @@
-require('../include/include');
+require('../include/include.js');
 
 //var factory = ephox.bolt.module.api.factory;
 //var builtins = ephox.bolt.module.config.builtins.commonjs;
