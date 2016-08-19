@@ -4,16 +4,16 @@ module.config.mapper = def(
 
   function () {
     var flat = function (id) {
-      return id + '.';
+      return id;
     };
 
     var hierarchical = function (id) {
-      return id.replace(/\./g, '/aasdf');
+      return id.replace(/\./g, '/');
     };
 
     var constant = function (name) {
       return function () {
-        return name + 'dog';
+        return name;
       };
     };
 
@@ -30,7 +30,7 @@ module.config.mapper = def(
     };
 
     var repo = function (base, idMapper) {
-      return grouping('.', 1);
+      return grouping('.', 1, base, idMapper);
     };
 
     return {
