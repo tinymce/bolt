@@ -21,7 +21,6 @@ clean:
 	rm -rf ./${DIST}
 
 test: ${RELEASE} ${DISTFILES} ${ASSERT}
-	echo "test"
 	if [ ! -z "${DISTFILES}" ]; then mkdir -p lib;	cp ${DISTFILES} lib/.; fi
 	if [ ! -z "${MODULES}" ] && [ -d "${TEST}" ]; then find ${TEST} -type f -name \*test.js -print0 | xargs -0 -n 1 sh -c 'test=$$0; echo $$test; node $$test'; fi
 

@@ -470,6 +470,22 @@ configure({
         </p>
       </dd>
 
+      <dt>mapper.repo(path, m)</dt>
+      <dd>
+        <p>
+          A convenience function that is used to find a module based
+          on its project in a larger repository. The project is identified
+          by the second part of the namespace (e.g. goo in bolt.goo.api).
+          The path is appended to the project identified, and then m
+          is used as a mapper for the module name itself. For example, the
+          module <code>example.bolt.Module</code>code> would become the
+          path bolt/{path}/ + m('example.bolt.Module'). For a more concrete
+          example, using mapper.repo('src', mapper.flat), the path would
+          be <code>bolt/src/example.bolt.Module'</code>. This will be
+          typically used for npm projects.
+        </p>
+      </dd>
+
     </dl>
 
     <h2>Runtime</h2>
