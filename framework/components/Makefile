@@ -36,6 +36,7 @@ ${ASSERT}: ../framework/components/assert.js
 	cp ../framework/components/assert.js lib/framework
 
 ${DISTFILES}:
+	# changes into each dependent library directory and runs make
 	cd `echo $@ | xargs dirname | xargs dirname` && ${MAKE} $(MFLAGS)
 
 ${RELEASE}: ${DIST} ${MODULES} ${DEPENDENCIES} ${PRELUDE} modules.in
