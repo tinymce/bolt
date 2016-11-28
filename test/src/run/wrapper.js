@@ -73,6 +73,7 @@ test.run.wrapper = def(
          * passing success and failure to the test function but we have a huge number of
          * existing tests that need to be converted first
          */
+        // IE doesn't support promises, this will at least not fail if a promise isn't returned. Proper fix TBD.
         if (promise !== undefined && promise instanceof Promise) {
           promise.then(onsuccess, onfailure);
         }
