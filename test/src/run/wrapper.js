@@ -91,7 +91,7 @@ test.run.wrapper = def(
 
       // Transferring all properties from window to global seems like a bad idea.
       // This is a list of commonly used variables in DOM tests that are transferred. It is expected to expand over time.
-      const variables = [
+      var variables = [
         "document",
         "window",
         "Node",
