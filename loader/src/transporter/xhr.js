@@ -3,8 +3,6 @@ loader.transporter.xhr = def(
   ],
 
   function () {
-    var cache = { };
-
     var requestObject = function () {
       // Correct way to use XMLHttpRequest in IE:
       // http://blogs.msdn.com/b/ie/archive/2006/01/23/516393.aspx
@@ -45,24 +43,16 @@ loader.transporter.xhr = def(
       req.send();
     };
 
-    var cacheSuccess = function (url, success) {
-      return function (response) {
-        cache[url] = response;
-        success(response);
-      };
-    };
-
     var sendHttpRequest = function (url, success, error) {
       var req = requestObject();
       if (req)
-        getUrl(req, url, cacheSuccess(url, success), error);
+        getUrl(req, url, success, error);
       else
         error('Transport error: browser does not support XMLHttpRequest.');
     };
 
     var request = function (url, success, error) {
-      if (url in cache) success(cache[url]);
-      else sendHttpRequest(url, success, error);
+      sendHttpRequest(url, success, error);
     };
 
     return {
