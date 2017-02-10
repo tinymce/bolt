@@ -43,16 +43,12 @@ loader.transporter.xhr = def(
       req.send();
     };
 
-    var sendHttpRequest = function (url, success, error) {
+    var request = function (url, success, error) {
       var req = requestObject();
       if (req)
         getUrl(req, url, success, error);
       else
         error('Transport error: browser does not support XMLHttpRequest.');
-    };
-
-    var request = function (url, success, error) {
-      sendHttpRequest(url, success, error);
     };
 
     return {
