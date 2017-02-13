@@ -10,12 +10,12 @@ module.reader.browser = def(
     var cache = { };
 
     var read = function (relativeto, file, done, acc) {
-      var accumulated = acc || { sources: [], types: [],  configs: [] };
+      var accumulated = acc || { sources: [], types: [], configs: [] };
       var base = path.dirname(relativeto);
       var absolute = base + '/' + file;
       var normalizedPath = path.normalize(absolute);
 
-      if (normalizedPath in cache) bouncing.evaluate(absolute, cache[normalizedPath], done, read, accumulated);
+      if (cache[normalizedPath] !== undefined) bouncing.evaluate(absolute, cache[normalizedPath], done, read, accumulated);
       else {
         xhr.request(absolute, function (payload) {
           cache[normalizedPath] = payload;
