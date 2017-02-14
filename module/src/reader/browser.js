@@ -15,7 +15,7 @@ module.reader.browser = def(
       var absolute = base + '/' + file;
       var normalizedPath = path.normalize(absolute);
 
-      if (cache[normalizedPath] !== undefined) bouncing.evaluate(absolute, cache[normalizedPath], done, read, accumulated);
+      if (cache.hasOwnProperty(normalizedPath)) bouncing.evaluate(absolute, cache[normalizedPath], done, read, accumulated);
       else {
         xhr.request(absolute, function (payload) {
           cache[normalizedPath] = payload;
