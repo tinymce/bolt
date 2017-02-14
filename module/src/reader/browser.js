@@ -7,13 +7,21 @@ module.reader.browser = def(
   ],
 
   function (error, bouncing, path, xhr) {
+    var cache = { };
+
     var read = function (relativeto, file, done, acc) {
-      var accumulated = acc || { sources: [], types: [],  configs: [] };
+      var accumulated = acc || { sources: [], types: [], configs: [] };
       var base = path.dirname(relativeto);
       var absolute = base + '/' + file;
-      xhr.request(absolute, function (payload) {
-        bouncing.evaluate(absolute, payload, done, read, accumulated);
-      }, error.die);
+      var normalizedPath = path.normalize(absolute);
+
+      if (cache.hasOwnProperty(normalizedPath)) bouncing.evaluate(absolute, cache[normalizedPath], done, read, accumulated);
+      else {
+        xhr.request(absolute, function (payload) {
+          cache[normalizedPath] = payload;
+          bouncing.evaluate(absolute, payload, done, read, accumulated);
+        }, error.die);
+      }
     };
 
     return {

@@ -1,8 +1,9 @@
 module.util.path = def(
   [
+    ephox.bolt.kernel.fp.array
   ],
 
-  function () {
+  function (ar) {
     var dirname = function (file) {
       var normalized = file.replace(/\\/g, '/');
       var end = normalized.lastIndexOf('/');
@@ -15,9 +16,23 @@ module.util.path = def(
       return normalized.substring(end + 1);
     };
 
+    var normalize = function (file) {
+      var parts = file.split('/');
+      var outParts = [];
+
+      ar.each(parts, function (part) {
+        if (part === '.') return;
+        else if (part === '..') outParts.pop();
+        else outParts.push(part);
+      });
+
+      return outParts.join('/');
+    };
+
     return {
       basename: basename,
-      dirname: dirname
+      dirname: dirname,
+      normalize: normalize
     };
   }
 );
