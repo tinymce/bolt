@@ -7,5 +7,7 @@ test('some example', [ 'bolt.demo.ModuleA', 'bolt.demo.test.Fixture' ], function
 
   assert.throws(function () { throw 'Some exception'; }, 'Some exception', 'Exception did not happen!');
 
+  assert.throwsError(function () { throw new Error('Some exception'); }, 'Some exception', 'Exception did not happen!');
+
   assert.succeeds(function () { }, 'Exception happened!');
 });
