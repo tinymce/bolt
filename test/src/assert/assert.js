@@ -28,6 +28,20 @@ test.assert.assert = def(
       }
     };
 
+    var throwsError = function (f, expected, message) {
+      var token = {};
+
+      try {
+        f();
+        throw token;
+      } catch (e) {
+        if (e === token)
+          throw new Error(message);
+        if (expected !== undefined)
+          eq(expected, e.message, message);
+      }
+    }
+
     var succeeds = function (f, message) {
       try {
         f();
@@ -54,6 +68,7 @@ test.assert.assert = def(
     return {
       eq: eq,
       throws: throws,
+      throwsError: throwsError,
       succeeds: succeeds,
       fail: fail,
       html: html

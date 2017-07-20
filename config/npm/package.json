@@ -1,6 +1,6 @@
 {
   "name": "@ephox/bolt",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "Bolt, AMD-like module system for JavaScript",
   "bin": {
     "bolt": "./bin/bolt.js",
