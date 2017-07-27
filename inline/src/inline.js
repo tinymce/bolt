@@ -55,8 +55,8 @@ var req = function (ids, callback) {
   var len = ids.length;
   var instances = new Array(len);
   for (var i = 0; i < len; ++i)
-    instances.push(dem(ids[i]));
-  callback.apply(null, callback);
+    instances[i] = dem(ids[i]);
+  callback.apply(null, instances);
 };
 
 var ephox = {};
