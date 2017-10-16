@@ -6,7 +6,7 @@ Bolt consists of a runtime framework, compiler and testing tools.
 
 The general philosophy is quick, clean and easy.
 
-Bolt is open source under a [BSD style license](https://raw.github.com/ephox/bolt/master/LICENCE).
+Bolt is open source under a [Apache-2.0 style license](https://raw.github.com/ephox/bolt/master/LICENCE).
 
 
 # Getting Bolt

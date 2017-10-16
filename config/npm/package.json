@@ -19,7 +19,7 @@
     "url": "https://github.com/ephox/bolt"
   },
   "author": "Ephox",
-  "license": "BSD-3-Clause",
+  "license": "Apache-2.0",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   }
