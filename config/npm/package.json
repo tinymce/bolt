@@ -1,6 +1,6 @@
 {
   "name": "@ephox/bolt",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "Bolt, AMD-like module system for JavaScript",
   "bin": {
     "bolt": "./bin/bolt.js",
@@ -19,7 +19,7 @@
     "url": "https://github.com/ephox/bolt"
   },
   "author": "Ephox",
-  "license": "BSD-3-Clause",
+  "license": "Apache-2.0",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   }

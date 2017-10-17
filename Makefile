@@ -30,13 +30,13 @@ projects: ${DIST} ${TAR_IMAGE}/bin ${TAR_IMAGE}/command ${TAR_IMAGE}/lib ${VERSI
 	cp script/command/* ${TAR_IMAGE}/command/.
 	mkdir ${TAR_IMAGE}/npm
 	cp script/npm/* ${TAR_IMAGE}/npm/.
-	cp config/npm/package.json README.md LICENSE ${TAR_IMAGE}/
+	cp config/npm/package.json README.md LICENSE.txt ${TAR_IMAGE}/
 
 	mkdir ${TAR_IMAGE}/tasks
 	cp script/grunt/grunt.js ${TAR_IMAGE}/tasks/bolt.js
 
 ${TAR}: projects
-	cp LICENSE README.md ${TAR_IMAGE}/.
+	cp LICENSE.txt README.md ${TAR_IMAGE}/.
 	tar cfz ${TAR} -C ${GEN}/image .
 
 ${DIRECTORIES}:
