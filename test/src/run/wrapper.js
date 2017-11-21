@@ -84,9 +84,13 @@ test.run.wrapper = def(
       var window;
       // I don't want to package jsdom with bolt
       try {
-        window = require("jsdom").jsdom().defaultView;
+        const jsdom = require("jsdom");
+        const { JSDOM } = jsdom;
+      if (JSDOM === undefined) console.error('Bolt now requires jdom v10 or higher');
+        window = new JSDOM().window;
       } catch (e) {
-        throw new Error('jsdom must be installed to run dom tests')
+        console.error(e);
+        throw new Error('jsdom must be installed to run dom tests');
       }
 
       // Transferring all properties from window to global seems like a bad idea.
