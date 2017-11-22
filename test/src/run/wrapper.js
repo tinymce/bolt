@@ -82,10 +82,10 @@ test.run.wrapper = def(
 
     var dom = function (reporter, testfile, name, f, next) {
       var window;
-      // I don't want to package jsdom with bolt
+      // we don't want to make jsdom a dependency of bolt, so fail at runtime if it isn't installed
       try {
-        const jsdom = require("jsdom");
-        const { JSDOM } = jsdom;
+        var jsdom = require("jsdom");
+        var JSDOM = jsdom.JSDOM;
       if (JSDOM === undefined) console.error('Bolt now requires jdom v10 or higher');
         window = new JSDOM().window;
       } catch (e) {
